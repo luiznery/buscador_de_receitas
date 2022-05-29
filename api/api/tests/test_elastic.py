@@ -72,3 +72,150 @@ class ElasticSearchQueriesTestCase(TestCase):
         # Realize search by ingredients on ElasticSearch
         ingredient = service.search_by_ingredients('ovo')
         self.assertIsNotNone(ingredient)
+
+    @elasticmock
+    def test_elastic_search_by_title(self):
+        index = 'recipes'
+        # Instantiate service
+        service = SubElasticSearchQueriesForTest()
+        # Create mocked data
+        service.create(index, elastic_data_mock)
+        # Realize search by ingredients on ElasticSearch
+        title = service.search_by_title('omelete')
+        self.assertIsNotNone(title)
+
+    @elasticmock
+    def test_elastic_search_by_name_empty(self):
+        index = 'recipes'
+        # Instantiate service
+        service = SubElasticSearchQueriesForTest()
+        # Create mocked data
+        service.create(index, elastic_data_mock)
+        # Realize search by name on ElasticSearch
+        recipe = service.search_by_name('')
+        self.assertIsNotNone(recipe)
+
+    @elasticmock
+    def test_elastic_search_by_ingredients_empty(self):
+        index = 'recipes'
+        # Instantiate service
+        service = SubElasticSearchQueriesForTest()
+        # Create mocked data
+        service.create(index, elastic_data_mock)
+        # Realize search by ingredients on ElasticSearch
+        ingredient = service.search_by_ingredients('')
+        self.assertIsNotNone(ingredient)
+
+    @elasticmock
+    def test_elastic_search_by_title_empty(self):
+        index = 'recipes'
+        # Instantiate service
+        service = SubElasticSearchQueriesForTest()
+        # Create mocked data
+        service.create(index, elastic_data_mock)
+        # Realize search by ingredients on ElasticSearch
+        title = service.search_by_title('')
+        self.assertIsNotNone(title)
+
+    @elasticmock
+    def test_elastic_search_by_name_especial_caracteres(self):
+        index = 'recipes'
+        # Instantiate service
+        service = SubElasticSearchQueriesForTest()
+        # Create mocked data
+        service.create(index, elastic_data_mock)
+        # Realize search by name on ElasticSearch
+        recipe = service.search_by_name('@#')
+        self.assertIsNotNone(recipe)
+
+    @elasticmock
+    def test_elastic_search_by_ingredients_especial_caracteres(self):
+        index = 'recipes'
+        # Instantiate service
+        service = SubElasticSearchQueriesForTest()
+        # Create mocked data
+        service.create(index, elastic_data_mock)
+        # Realize search by ingredients on ElasticSearch
+        ingredient = service.search_by_ingredients('@#')
+        self.assertIsNotNone(ingredient)
+
+    @elasticmock
+    def test_elastic_search_by_title_especial_caracteres(self):
+        index = 'recipes'
+        # Instantiate service
+        service = SubElasticSearchQueriesForTest()
+        # Create mocked data
+        service.create(index, elastic_data_mock)
+        # Realize search by ingredients on ElasticSearch
+        title = service.search_by_title('@#')
+        self.assertIsNotNone(title)
+
+
+
+    @elasticmock
+    def test_elastic_search_by_name_upper_caracteres(self):
+        index = 'recipes'
+        # Instantiate service
+        service = SubElasticSearchQueriesForTest()
+        # Create mocked data
+        service.create(index, elastic_data_mock)
+        # Realize search by name on ElasticSearch
+        recipe = service.search_by_name('AAa')
+        self.assertIsNotNone(recipe)
+
+    @elasticmock
+    def test_elastic_search_by_ingredients_upper_caracteres(self):
+        index = 'recipes'
+        # Instantiate service
+        service = SubElasticSearchQueriesForTest()
+        # Create mocked data
+        service.create(index, elastic_data_mock)
+        # Realize search by ingredients on ElasticSearch
+        ingredient = service.search_by_ingredients('AAa')
+        self.assertIsNotNone(ingredient)
+
+    @elasticmock
+    def test_elastic_search_by_title_upper_caracteres(self):
+        index = 'recipes'
+        # Instantiate service
+        service = SubElasticSearchQueriesForTest()
+        # Create mocked data
+        service.create(index, elastic_data_mock)
+        # Realize search by ingredients on ElasticSearch
+        title = service.search_by_title('AAa')
+        self.assertIsNotNone(title)
+
+
+    @elasticmock
+    def test_elastic_search_by_returning_fields_empty(self):
+
+        index = 'recipes'
+        service = SubElasticSearchQueriesForTest()
+        service.create(index, elastic_data_mock)
+        service.reset_returning_fields([])
+        self.assertEquals(service.returning_fields, [])
+
+
+    @elasticmock
+    def test_elastic_search_by_returning_fields(self):
+
+        index = 'recipes'
+        service = SubElasticSearchQueriesForTest()
+        service.create(index, elastic_data_mock)
+        service.reset_returning_fields(['pizza'])
+        self.assertEquals(service.returning_fields, ['pizza'])
+
+
+    @elasticmock
+    def test_elastic_search_constructor_localhost(self):
+        index = 'recipes'
+        service = SubElasticSearchQueriesForTest()
+        service.create(index, elastic_data_mock)
+        self.assertEquals(service.host, 'localhost')
+
+    @elasticmock
+    def test_elastic_search_constructor_localhost(self):
+        index = 'recipes'
+        service = SubElasticSearchQueriesForTest()
+        service.create(index, elastic_data_mock)
+        self.assertEquals(service.port, 9200)
