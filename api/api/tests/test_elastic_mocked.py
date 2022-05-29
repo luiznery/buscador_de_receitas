@@ -256,18 +256,23 @@ class ElasticSearchQueriesMockedTestCase(TestCase):
 
             self.assertEqual(type(recipe),type({}))
     
+    def test_elastic_hostname(self):
+        test_host = '333.333.333'
+        elastic_queries = ElasticSearchQueries(host=test_host)
+        self.assertTrue( test_host in str(elastic_queries.es) )
+    
+    def test_elastic_port(self):
+        test_port = '3333'
+        elastic_queries = ElasticSearchQueries(port=test_port)
+        self.assertTrue( test_port in str(elastic_queries.es) )
+    
+    def test_calculate_pagination(self):
+        self.assertEqual(calculate_pagination(10,1),0)
+        self.assertEqual(calculate_pagination(12,1),0)
+
+        self.assertEqual(calculate_pagination(12,2),12)
+        self.assertEqual(calculate_pagination(12,3),24)
+    
     def test_parse_result(self):
         result = parse_result(search_response)
         self.assertEqual(result[0]['recipe_title'], search_response['hits']['hits'][0]['_source']['recipe_title'])
-    
-    
-
-    # def test_elastic_search_by_ingredients(self):
-    #     index = 'recipes'
-    #     # Instantiate service
-    #     service = SubElasticSearchQueriesForTest()
-    #     # Create mocked data
-    #     service.create(index, elastic_data_mock)
-    #     # Realize search by ingredients on ElasticSearch
-    #     ingredient = service.search_by_ingredients('ovo')
-    #     self.assertIsNotNone(ingredient)

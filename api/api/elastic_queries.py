@@ -25,6 +25,13 @@ def parse_result(result):
         data.append(hit['_source'])
     return data
 
+def calculate_pagination(size,page):
+    """
+    Calculates the pagination for the query.
+        page: int.
+    """
+    return size*(page-1)
+
 
 class ElasticSearchQueries:
     """
@@ -85,7 +92,7 @@ class ElasticSearchQueries:
             index=self.index,
             body=query,
             size=size,
-            from_=size*(page-1),
+            from_=calculate_pagination(size,page),
             _source=self.returning_fields
         )
 
@@ -108,7 +115,7 @@ class ElasticSearchQueries:
             index=self.index,
             body=query,
             size=size,
-            from_=size*(page-1),
+            from_=calculate_pagination(size,page),
             _source=self.returning_fields
         )
 
@@ -131,7 +138,7 @@ class ElasticSearchQueries:
             index=self.index,
             body=query,
             size=size,
-            from_=size*(page-1),
+            from_=calculate_pagination(size,page),
             _source=self.returning_fields
         )
 

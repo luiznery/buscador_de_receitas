@@ -131,3 +131,5 @@ dmypy.json
 #elastic folder
 backend/database/elastic/*
 !backend/database/elastic/README.md
+
+database/elastic/*
