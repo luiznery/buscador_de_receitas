@@ -28,24 +28,67 @@ class FilterUtils:
         """
         filters = {}
         if 'group' in params:
+
+            if params['group'].isupper():
+                raise Exception("Group string should be lowercase")
+
             filters['group'] = [
                 group_mapping[group] 
                 for group in params['group'].split(',')
             ]
         
         if 'time_min' in params or 'time_max' in params:
+            if 'time_min' in params:
+                if not isinstance(params['time_min'], int):
+                    raise Exception("time_min isn't numeric")
+                if params['time_min'] < 0:
+                    raise Exception("time_min is negative")
+            if 'time_max' in params:
+                if not isinstance(params['time_max'], int):
+                    raise Exception("time_max isn't numeric")
+                if params['time_max'] < 0:
+                    raise Exception("time_max is negative")
+            if 'time_min' in params and 'time_max' in params:
+                if params['time_min'] > params['time_max']:
+                    raise Exception("time_min is bigger than time_max")
             filters['preparation_time'] = (
                 params['time_min'] if 'time_min' in params else 0,
                 params['time_max'] if 'time_max' in params else 10000000
             )
         
         if 'portions_min' in params or 'portions_max' in params:
+            if 'portions_min' in params:
+                if not isinstance(params['portions_min'], int):
+                    raise Exception("portions_min isn't numeric")
+                if params['portions_min'] < 0:
+                    raise Exception("portions_min is negative")
+            if 'portions_max' in params:
+                if not isinstance(params['portions_max'], int):
+                    raise Exception("portions_max isn't numeric")
+                if params['portions_max'] < 0:
+                    raise Exception("portions_max is negative")
+            if 'portions_min' in params and 'portions_max' in params:
+                if params['portions_min'] > params['portions_max']:
+                    raise Exception("portions_min is bigger than portions_max")
             filters['portions'] = (
                 params['portions_min'] if 'portions_min' in params else 0,
                 params['portions_max'] if 'portions_max' in params else 10000000
             )
         
         if 'favorites_min' in params or 'favorites_max' in params:
+            if 'favorites_min' in params:
+                if not isinstance(params['favorites_min'], int):
+                    raise Exception("favorites_min isn't numeric")
+                if params['favorites_min'] < 0:
+                    raise Exception("favorites_min is negative")
+            if 'favorites_max' in params:
+                if not isinstance(params['favorites_max'], int):
+                    raise Exception("favorites_max isn't numeric")
+                if params['favorites_max'] < 0:
+                    raise Exception("favorites_max is negative")
+            if 'favorites_min' in params and 'favorites_max' in params:
+                if params['favorites_min'] > params['favorites_max']:
+                    raise Exception("favorites_min is bigger than favorites_max")
             filters['favorites'] = (
                 params['favorites_min'] if 'favorites_min' in params else 0,
                 params['favorites_max'] if 'favorites_max' in params else 10000000

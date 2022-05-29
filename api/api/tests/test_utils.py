@@ -39,12 +39,14 @@ class ViewTestCase(TestCase):
             FilterUtils.generate_filters(params),
             filters)
 
-    def check_if_first_letter_is_capslock(self):
+    def check_if_group_is_lowercase(self):
         params = {
             'group': 'Sopas',
         }
-        # self.assertEqual(FilterUtils.generate_filters(params),
-        #                 True)
+        with self.assertRaisesMessage(Exception,"Group string should be lowercase"):            
+            FilterUtils.generate_filters(params) 
+
+        
 
 
     def test_if_time_max_is_bigger_than_time_min(self):
@@ -52,72 +54,122 @@ class ViewTestCase(TestCase):
             'time_min': 2,
             'time_max': 1,
         }
-        # self.assertEqual(FilterUtils.generate_filters(params), 
-        #                 True)
+        with self.assertRaisesMessage(Exception,"time_min is bigger than time_max"):            
+            FilterUtils.generate_filters(params) 
+
 
     def test_if_portions_max_is_bigger_than_portions_min(self):
         params = {
             'portions_min': 4,
             'portions_max': 3,
         }
-        # self.assertEqual(FilterUtils.generate_filters(params),
-        #                  True)
+        with self.assertRaisesMessage(Exception,"portions_min is bigger than portions_max"):            
+            FilterUtils.generate_filters(params) 
 
     def test_if_favorites_max_is_bigger_than_favorites_min(self):
         params = {
             'favorites_min': 6,
             'favorites_max': 5,
         }
-        # self.assertEqual(FilterUtils.generate_filters(params), 
-        #                 True)
+        with self.assertRaisesMessage(Exception,"favorites_min is bigger than favorites_max"):            
+            FilterUtils.generate_filters(params) 
 
-    def test_if_time_is_numeric(self):
+    def test_if_time_min_is_numeric(self):
         params = {
-            'favorites_min': 'um',
-            'favorites_max': 2,
+            'time_min': 'um',
+            'time_max': 2,
         }
-        # self.assertEqual(FilterUtils.generate_filters(params), 
-        #                 True)
-
-    def test_if_time_is_positive(self):
+        with self.assertRaisesMessage(Exception,"time_min isn't numeric"):            
+            FilterUtils.generate_filters(params) 
+    
+    def test_if_time_max_is_numeric(self):
         params = {
-            'favorites_min': 1,
-            'favorites_max': -2,
+            'time_min': 1,
+            'time_max': 'dois',
         }
-        # self.assertEqual(FilterUtils.generate_filters(params), 
-        #                 True)
+        with self.assertRaisesMessage(Exception,"time_max isn't numeric"):            
+            FilterUtils.generate_filters(params) 
 
-    def test_if_portions_is_numeric(self):
+    def test_if_time_min_is_positive(self):
+        params = {
+            'time_min': -1,
+            'time_max': 2,
+        }
+        with self.assertRaisesMessage(Exception,"time_min is negative"):            
+            FilterUtils.generate_filters(params) 
+
+    def test_if_time_max_is_positive(self):
+        params = {
+            'time_min': 1,
+            'time_max': -2,
+        }
+        with self.assertRaisesMessage(Exception,"time_max is negative"):            
+            FilterUtils.generate_filters(params) 
+
+    def test_if_portions_min_is_numeric(self):
         params = {
             'portions_min': 'tres',
             'portions_max': 4,
         }
-        # self.assertEqual(FilterUtils.generate_filters(params), 
-        #                 True)
+        with self.assertRaisesMessage(Exception,"portions_min isn't numeric"):            
+            FilterUtils.generate_filters(params) 
 
-    def test_if_portions_is_positive(self):
+    def test_if_portions_max_is_numeric(self):
+        params = {
+            'portions_min': 3,
+            'portions_max': 'quatro',
+        }
+        with self.assertRaisesMessage(Exception,"portions_max isn't numeric"):            
+            FilterUtils.generate_filters(params) 
+
+    def test_if_portions_min_is_positive(self):
+        params = {
+            'portions_min': -3,
+            'portions_max': 4,
+        }
+        with self.assertRaisesMessage(Exception,"portions_min is negative"):            
+            FilterUtils.generate_filters(params) 
+
+    def test_if_portions_max_is_positive(self):
         params = {
             'portions_min': 3,
             'portions_max': -4,
         }
-        # self.assertEqual(FilterUtils.generate_filters(params), 
-        #                 True)
+        with self.assertRaisesMessage(Exception,"portions_max is negative"):            
+            FilterUtils.generate_filters(params) 
 
-    def test_if_favorites_is_numeric(self):
+    def test_if_favorites_min_is_numeric(self):
         params = {
             'favorites_min': 'cinco',
             'favorites_max': 6,
         }
-        # self.assertEqual(FilterUtils.generate_filters(params), 
-        #                 True)
+        with self.assertRaisesMessage(Exception,"favorites_min isn't numeric"):            
+            FilterUtils.generate_filters(params) 
 
-    def test_if_favorites_is_positive(self):
+    def test_if_favorites_min_is_numeric(self):
+        params = {
+            'favorites_min': 5,
+            'favorites_max': 'seis',
+        }
+        with self.assertRaisesMessage(Exception,"favorites_max isn't numeric"):            
+            FilterUtils.generate_filters(params) 
+
+    def test_if_favorites_min_is_positive(self):
+        params = {
+            'favorites_min': -5,
+            'favorites_max': 6,
+        }
+        with self.assertRaisesMessage(Exception,"favorites_min is negative"):            
+            FilterUtils.generate_filters(params) 
+
+    def test_if_favorites_max_is_positive(self):
         params = {
             'favorites_min': 5,
             'favorites_max': -6,
         }
-        # self.assertEqual(FilterUtils.generate_filters(params), 
-        #                 True)
+        with self.assertRaisesMessage(Exception,"favorites_max is negative"):            
+            FilterUtils.generate_filters(params) 
+        
 
     def test_get_query_by_name_without_filters(self):
         must = [
