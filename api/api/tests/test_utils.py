@@ -1,4 +1,3 @@
-
 from rest_framework.test import APIClient
 from rest_framework import status
 #from django.core.urlresolvers import reverse
@@ -40,27 +39,254 @@ class ViewTestCase(TestCase):
             FilterUtils.generate_filters(params),
             filters)
 
+    def check_if_first_letter_is_capslock(self):
+        params = {
+            'group': 'Sopas',
+        }
+        # self.assertEqual(FilterUtils.generate_filters(params),
+        #                 True)
 
-    # def set_response(self, url, param):
-    #     """Create response from parameter"""
-    #     client = APIClient()
-    #     return client.get(
-    #         url,
-    #         param,
-    #         format='json')
 
-    # def test_api_wrong_url(self):
-    #     """Test the api has handle wrong url capability."""
-    #     wrong_url = '/any'
-    #     wrong_param = {'ingredient': 'tomate'}
-    #     self.assertEqual(
-    #         self.set_response(wrong_url, wrong_param).status_code,
-    #         status.HTTP_404_NOT_FOUND)
+    def test_if_time_max_is_bigger_than_time_min(self):
+        params = {
+            'time_min': 2,
+            'time_max': 1,
+        }
+        # self.assertEqual(FilterUtils.generate_filters(params), 
+        #                 True)
 
-    # def test_api_recipes_list_wrong_param(self):
-    #     """Test the api has handle wrong parameters capability."""
-    #     url = '/recipes/'
-    #     param = {'wrong': 'even more wrong'}
-    #     self.assertEqual(
-    #         self.set_response(url, param).status_code,
-    #         status.HTTP_400_BAD_REQUEST)
+    def test_if_portions_max_is_bigger_than_portions_min(self):
+        params = {
+            'portions_min': 4,
+            'portions_max': 3,
+        }
+        # self.assertEqual(FilterUtils.generate_filters(params),
+        #                  True)
+
+    def test_if_favorites_max_is_bigger_than_favorites_min(self):
+        params = {
+            'favorites_min': 6,
+            'favorites_max': 5,
+        }
+        # self.assertEqual(FilterUtils.generate_filters(params), 
+        #                 True)
+
+    def test_if_time_is_numeric(self):
+        params = {
+            'favorites_min': 'um',
+            'favorites_max': 2,
+        }
+        # self.assertEqual(FilterUtils.generate_filters(params), 
+        #                 True)
+
+    def test_if_time_is_positive(self):
+        params = {
+            'favorites_min': 1,
+            'favorites_max': -2,
+        }
+        # self.assertEqual(FilterUtils.generate_filters(params), 
+        #                 True)
+
+    def test_if_portions_is_numeric(self):
+        params = {
+            'portions_min': 'tres',
+            'portions_max': 4,
+        }
+        # self.assertEqual(FilterUtils.generate_filters(params), 
+        #                 True)
+
+    def test_if_portions_is_positive(self):
+        params = {
+            'portions_min': 3,
+            'portions_max': -4,
+        }
+        # self.assertEqual(FilterUtils.generate_filters(params), 
+        #                 True)
+
+    def test_if_favorites_is_numeric(self):
+        params = {
+            'favorites_min': 'cinco',
+            'favorites_max': 6,
+        }
+        # self.assertEqual(FilterUtils.generate_filters(params), 
+        #                 True)
+
+    def test_if_favorites_is_positive(self):
+        params = {
+            'favorites_min': 5,
+            'favorites_max': -6,
+        }
+        # self.assertEqual(FilterUtils.generate_filters(params), 
+        #                 True)
+
+    def test_get_query_by_name_without_filters(self):
+        must = [
+            {
+                "multi_match": {
+                    "query": 'bolo de limão',
+                    "fields": [
+                        "recipe_title^2",
+                        "ingredients^2",
+                        "raw_text"
+                    ],
+                    "type": "most_fields",
+                    "fuzziness": 1
+                }
+            }
+        ]
+        query = {
+            "query": {
+                "bool": {
+                    "must": must
+                }
+            }
+        }
+        self.assertEqual(FilterUtils.get_query_by_name_filtred('bolo de limão', filters=None, fuzziness=1),
+                        query)
+
+    def test_get_query_by_name_with_filters(self):
+        must = [
+            {
+                "multi_match": {
+                    "query": 'bolo de limão',
+                    "fields": [
+                        "recipe_title^2",
+                        "ingredients^2",
+                        "raw_text"
+                    ],
+                    "type": "most_fields",
+                    "fuzziness": 1
+                }
+            }
+        ]
+        filters = {
+            'group': ['Bolos'],
+            'preparation_time': (1, 2),
+            'portions': (3, 4),
+            'favorites': (5, 6)
+        }
+        must = must + FilterUtils.get_filter_queries(filters)
+        query = {
+            "query": {
+                "bool": {
+                    "must": must
+                }
+            }
+        }
+        self.assertEqual(FilterUtils.get_query_by_name_filtred('bolo de limão', filters={
+                        'group': ['Bolos'],
+                        'preparation_time': (1, 2),
+                        'portions': (3, 4),
+                        'favorites': (5, 6)
+                        }, fuzziness=1),
+                            query)
+
+    def test_get_query_by_ingredients_without_filters(self):
+        ingredients = ['farinha', 'ovo']
+        must = [
+            {
+                "match": {
+                    "ingredients": {
+                        "query": ingredient,
+                        "fuzziness": 1
+                    },
+                }
+            } for ingredient in ingredients
+        ]
+        query = {
+            "query": {
+                "bool": {
+                    "must": must
+                }
+            }
+        }
+        self.assertEqual(FilterUtils.get_query_by_ingredients_filtred(['farinha', 'ovo'], filters=None, fuzziness=1),
+                         query)
+
+    def test_get_query_by_ingredients_with_filters(self):
+        ingredients = ['tomate', 'alface']
+        must = [
+            {
+                "match": {
+                    "ingredients": {
+                        "query": ingredient,
+                        "fuzziness": 1
+                    },
+                }
+            } for ingredient in ingredients
+        ]
+        filters = {
+            'group': ['Saladas'],
+            'preparation_time': (1, 2),
+            'portions': (3, 4),
+            'favorites': (5, 6)
+        }
+        must = must + FilterUtils.get_filter_queries(filters)
+        query = {
+            "query": {
+                "bool": {
+                    "must": must
+                }
+            }
+        }
+        self.assertEqual(FilterUtils.get_query_by_ingredients_filtred(['tomate', 'alface'], filters={
+                        'group': ['Saladas'],
+                        'preparation_time': (1, 2),
+                        'portions': (3, 4),
+                        'favorites': (5, 6)
+                        }, fuzziness=1),
+                        query)
+
+    def test_get_query_by_title_without_filters(self):
+        must = [
+            {
+                "match": {
+                    "recipe_title": {
+                        "query": 'salada de atum',
+                        "fuzziness": 1
+                    },
+                }
+            }
+        ]
+        query = {
+            "query": {
+                "bool": {
+                    "must": must
+                }
+            }
+        }
+        self.assertEqual(FilterUtils.get_query_by_title_filtred('salada de atum', filters=None, fuzziness=1),
+                         query)
+
+    def test_get_query_by_title_with_filters(self):
+        must = [
+            {
+                "match": {
+                    "recipe_title": {
+                        "query": 'salada de atum',
+                        "fuzziness": 1
+                    },
+                }
+            }
+        ]
+        filters = {
+            'group': ['Saladas'],
+            'preparation_time': (1, 2),
+            'portions': (3, 4),
+            'favorites': (5, 6)
+        }
+        must = must + FilterUtils.get_filter_queries(filters)
+        query = {
+            "query": {
+                "bool": {
+                    "must": must
+                }
+            }
+        }
+        self.assertEqual(FilterUtils.get_query_by_title_filtred('salada de atum', filters={
+                        'group': ['Saladas'],
+                        'preparation_time': (1, 2),
+                        'portions': (3, 4),
+                        'favorites': (5, 6)
+                        }, fuzziness=1),
+                         query)
