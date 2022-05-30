@@ -9,4 +9,5 @@ Rest API que implementa um buscador de receitas. Para a busca, usamos o Elastics
 
 **Tecnologias**:
 - API: Django
+- Banco de dadps: ElasticSearch
 - Test: Elasticmock e Mock
