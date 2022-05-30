@@ -46,8 +46,6 @@ class ViewTestCase(TestCase):
         with self.assertRaisesMessage(Exception,"Group string should be lowercase"):            
             FilterUtils.generate_filters(params) 
 
-        
-
 
     def test_if_time_max_is_bigger_than_time_min(self):
         params = {

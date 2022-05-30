@@ -1,7 +1,7 @@
 """Tests.
 # """
 from django.test import TestCase
-from api.elastic_queries import ElasticSearchQueries,parse_result
+from api.elastic_queries import ElasticSearchQueries,parse_result,calculate_pagination
 import mock
 
 import json
