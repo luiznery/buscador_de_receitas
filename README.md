@@ -1,6 +1,6 @@
 ***TP1 Teste de Software - Buscador de receitas***
 
-Sistema para auxiliar a encontrar receitas baseadas nos ingredientes que a pessoa já tem em casa.
+Rest API que implementa um buscador de receitas. Para a busca, usamos o Elasticsearch, onde indexamos os dados de receitas coletadas do Tudo Gostoso. Essa ferramenta permite fazer buscas personalizadas num indice que contem diversas informações como ingredientes, avaliações, porções, tempo de preparo e etc. 
 
 **Grupo**:
 - Ester Fiorillo
@@ -8,7 +8,5 @@ Sistema para auxiliar a encontrar receitas baseadas nos ingredientes que a pesso
 - Pedro Wildemberg
 
 **Tecnologias**:
-- Back-end: Django
-- Front-end: Vue.js
-- DataBase: PostgreSQL
-- Test: Elasticmock
+- API: Django
+- Test: Elasticmock e Mock
