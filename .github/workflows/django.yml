@@ -28,5 +28,5 @@ jobs:
         pip install coverage
     - name: Run Tests
       run: |
-        coverage run --source='.' manage.py test api
+        coverage run --source='.' api/manage.py test api
         coverage report
