@@ -38,3 +38,7 @@ class SearchesTestCase(TestCase):
         for line in documents:
             self.assertIn('ovo',line['raw_text'])
             self.assertIn('leite',line['raw_text'])
+    
+    def test_search_for_nothing(self):
+        response=self.client.get('recipes/search/?')
+        self.assertEqual(response.status_code, 404) 
