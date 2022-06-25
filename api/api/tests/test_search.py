@@ -21,3 +21,10 @@ class SearchesTestCase(TestCase):
         self.assertGreater(len(documents),0)
         for line in documents:
             self.assertIn('bolo',line['raw_text'])
+    
+    def test_search_title(self):
+        response=self.client.get('/recipes/search/?title=bolo')
+        documents = json.loads(response.content)
+        self.assertGreater(len(documents),0)
+        for line in documents:
+            self.assertIn('bolo',line['raw_text'])
